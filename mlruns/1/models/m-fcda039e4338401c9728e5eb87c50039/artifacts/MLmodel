@@ -1,0 +1,29 @@
+artifact_path: file:D:/Loan_Approval_Request/mlruns/1/models/m-fcda039e4338401c9728e5eb87c50039/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.12.10
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.0
+    skops_trusted_types:
+    - src.features.RiskFeatureGenerator
+    - src.preprocessing.MissingValueImputer
+    - src.preprocessing.OutlierClipper
+    - src.preprocessing.ProductionDataPreprocessor
+    - xgboost.core.Booster
+    - xgboost.sklearn.XGBClassifier
+mlflow_version: 3.14.0
+model_id: m-fcda039e4338401c9728e5eb87c50039
+model_size_bytes: 725810
+model_uuid: m-fcda039e4338401c9728e5eb87c50039
+prompts: null
+run_id: dd918dd2c5d2418a97fa263481a55be4
+utc_time_created: '2026-07-07 14:23:14.812914'

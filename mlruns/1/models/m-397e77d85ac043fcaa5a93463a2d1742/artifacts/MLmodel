@@ -1,0 +1,27 @@
+artifact_path: file:D:/Loan_Approval_Request/mlruns/1/models/m-397e77d85ac043fcaa5a93463a2d1742/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.12.10
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.0
+    skops_trusted_types:
+    - src.features.RiskFeatureGenerator
+    - src.preprocessing.MissingValueImputer
+    - src.preprocessing.OutlierClipper
+    - src.preprocessing.ProductionDataPreprocessor
+mlflow_version: 3.14.0
+model_id: m-397e77d85ac043fcaa5a93463a2d1742
+model_size_bytes: 452469
+model_uuid: m-397e77d85ac043fcaa5a93463a2d1742
+prompts: null
+run_id: 3221fc8ff1be48a1b64d9c8a0b680478
+utc_time_created: '2026-07-07 13:27:22.629223'
