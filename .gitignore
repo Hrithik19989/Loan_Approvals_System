@@ -1,5 +1,37 @@
+# ==============================================================================
+# PROD MACHINE LEARNING PROJECT GITIGNORE CONTRACT
+# ==============================================================================
+
+# 1. Virtual Environments and Local System Setup
 venv/
-.mlruns/
-__pycache__/
-logs/
+ENV/
+env/
 .pytest_cache/
+.ipynb_checkpoints/
+.vscode/
+
+# 2. Compiled Python Runtime Caches
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# 3. Microservice Executions and Tracking Logs
+logs/*.log
+*.log
+
+# 4. MLflow Local Database and Cold Runs Experiment Data
+mlruns/
+mlflow.db
+
+# 5. Heavy Model Serialization & Graphic Exports
+# (Keep these comments on GitHub clean; artifacts should be built via src/train.py)
+models/loan_model_pipeline.joblib
+models/*_cv_results.csv
+models/confusion_matrix.png
+models/roc_curve.png
+models/shap_summary_plot.png
+
+# 6. Raw Local Inbound Datasets (Keep data clean from open repositories)
+data/processed/
+data/raw/Loan Prediction.csv

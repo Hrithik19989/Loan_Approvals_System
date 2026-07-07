@@ -2,6 +2,86 @@
 
 An asynchronous, containerized Machine Learning microservice built around the **Ethicalstar Loan Prediction Dataset**. It evaluates applicant default parameters and leverages **SHAP TreeExplainers** to deliver localized feature attributions for banking compliance.
 
+---
+
+## Overview
+This repository contains:
+- **FastAPI inference API** (async request handling)
+- **Streamlit dashboard** for interactive exploration
+- **Training + evaluation pipeline** (RandomizedSearchCV + MLflow tracking)
+- **Model explainability** using SHAP
+
+---
+
+## Dataset
+- Dataset: **Ethicalstar Loan Prediction Dataset**
+- Source file: `data/raw/Loan Prediction.csv`
+- Target (label): loan default / approval (as defined in the dataset schema)
+- Notes: preprocessing is implemented to reduce leakage (missing values/outliers handling).
+
+(See `notebooks/01_exploratory_data_analysis.ipynb` for deeper dataset exploration.)
+
+---
+
+## Installation
+### Local setup
+```bash
+python -m venv venv
+venv\Scripts\activate  # Windows
+pip install -r requirements.txt
+```
+
+---
+
+## Training
+Run the training pipeline (hyperparameter search + export pipelines):
+```bash
+python -m src.train
+```
+
+Generate evaluation artifacts (metrics/plots + SHAP summaries):
+```bash
+python -m src.evaluate
+```
+
+---
+
+## API Usage
+### Start the FastAPI service
+```bash
+uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### Predict endpoint
+- Route: `POST /api/v1/predict`
+- Auto docs:
+  - Swagger: `http://localhost:8000/docs`
+  - ReDoc: `http://localhost:8000/redoc`
+
+### Run API tests
+```bash
+pytest tests/test_api.py
+```
+
+---
+
+## Results
+- Selected champion model: **`XGBClassifier`** optimized via `RandomizedSearchCV`
+- Reported F1 (holdout): **0.8940**
+- Compared against Logistic Regression (reported F1: **0.7120**)
+- Explainability:
+  - SHAP global summary plots and per-request attributions are generated for compliance-friendly interpretability.
+
+---
+
+## Future improvements
+- Add drift monitoring for categorical features (e.g., `CITY`, `Profession`).
+- Expand tests to cover additional edge cases (invalid schema inputs, extreme values).
+- Improve observability: structured logging for inference latency + prediction distribution.
+- Add model version registry & automatic promotion thresholds.
+
+---
+
 ## 📊 Workspace Directory Architecture
 ```text
 loan_approval_system/
@@ -25,50 +105,16 @@ loan_approval_system/
 └── requirements.txt         # Strict dependency mapping list
 ```
 
-## 🛠️ Local Environment Initialization Lifecycle
-Follow this command sequence to install dependencies, run optimization loops, and start the local services:
-
-```bash
-# 1. Initialize local virtual environment configurations
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# 2. Run multi-model hyperparameter training loops & export joblib pipelines
-python -m src.train
-
-# 3. Generate diagnostic metrics graphs & global SHAP summary plot matrices
-python -m src.evaluate
-
-# 4. Run automated PyTest validation checks
-pytest tests/test_api.py
-
-# 5. Spin up the underlying asynchronous FastAPI backend engine 
-uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
-```
+---
 
 ## 📦 Containerization Platform Commands
-To run the complete system in an isolated network container layer, build the image and use separate host ports to target your services:
+Build the production image and run the API + dashboard:
 
 ```bash
-# Build the production image artifact
 docker build -t loan-underwriting-system:latest .
 
-# Run and map the underlying FastAPI Microservice engine 
 docker run -d -p 8000:8000 --name loan-api loan-underwriting-system:latest
 
-# Run the Streamlit Dashboard (Overriding the default command)
 docker run -d -p 8501:8501 --net=host --name loan-ui loan-underwriting-system:latest streamlit run dashboard/app.py --server.port=8501
 ```
 
-## 📈 Model Performance Selection Matrix
-* **Selected Champion**: `XGBClassifier` optimized via RandomizedSearchCV.
-* **Justification**: Delivered an F1-Score of `0.8940` on the holdout split, significantly outperforming Logistic Regression (`0.7120`). Tree architectures also cleanly map feature patterns within high-cardinality values like `Profession` and `CITY`.
-
-## 📈 Production Validation Results
-* **Inference Endpoint Route**: `POST /api/v1/predict`
-* **Response Status Standard**: `200 OK`
-* **Validation Suite Coverage**: 100% Core Endpoint Path Pass (`pytest tests/test_api.py`)
-* **Auto-Generated Documentation Endpoints**:
-  * Swagger Interactive UI: `http://localhost:8000/docs`
-  * ReDoc Static Specifications: `http://localhost:8000/redoc`
