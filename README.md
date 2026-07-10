@@ -116,5 +116,9 @@ docker build -t loan-underwriting-system:latest .
 docker run -d -p 8000:8000 --name loan-api loan-underwriting-system:latest
 
 docker run -d -p 8501:8501 --net=host --name loan-ui loan-underwriting-system:latest streamlit run dashboard/app.py --server.port=8501
+
+## 📺 Project Walkthrough Demo Video
+👉 [Click Here to Watch the 5-Minute Silent Demo Video](https://drive.google.com/file/d/1YNUApbQ-xTxT3uaq9Uf_6rN8eWuIDqY3/view?usp=drive_link)
+
 ```
 
